@@ -37,7 +37,8 @@ public class MonitoringFilter implements RenderFilter {
 		Date finished = new Date();
 		long elapsed = finished.getTime() - start.getTime();
 
-		response.getWriter().append("<span class=\"stopwatch\">" + elapsed + " ms render time</span>");
+		response.getWriter().append("<span class=\"stopwatch\">" + elapsed + " ms render time <span class=\"stopwatch-details\">(" + context + ")</span></span>");
+
 		log.info(elapsed + " milliseconds in " + context);
 	}
 
