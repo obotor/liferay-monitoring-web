@@ -8,16 +8,20 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 
-public class MonitoringActivator implements BundleActivator {
+@Component(immediate = true, service = MonitoringActivator.class)
+public class MonitoringActivator {
 
 	private PortletServiceListener portletServiceListener;
 	public static final Log log = LogFactoryUtil.getLog(MonitoringActivator.class);
 
-	@Override
+	@Activate
 	public void start(BundleContext bundleContext) throws Exception {
 		portletServiceListener = new PortletServiceListener(bundleContext);
-		String filter = "(objectclass="+Portlet.class.getName()+")";
+		String filter = "(objectClass="+Portlet.class.getName()+")";
 		int count = 0;
 		try {
 			// get notified of all new portlet services added in future, to add filter
@@ -36,9 +40,9 @@ public class MonitoringActivator implements BundleActivator {
 		log.info("Initialized " + count + " PortletFilters");
 	}
 
-	@Override
+	@Deactivate
 	public void stop(BundleContext bundleContext) throws Exception {
-		String filter = "(objectclass="+Portlet.class.getName()+")";
+		String filter = "(objectClass="+Portlet.class.getName()+")";
 		try {
 			@SuppressWarnings("rawtypes")
 			ServiceReference[] srl = bundleContext.getServiceReferences(Portlet.class.getName(), filter);
